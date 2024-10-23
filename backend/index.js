@@ -350,18 +350,21 @@ app.post("/placeorder", fetchuser, async (req, res) => {
 
     for (let item of products) {
       console.log("item", item.productId);
-      // const productId = new mongoose.Types.ObjectId(item.productId);
+      // Find the product by ID
       const product = await Product.findById(item.productId);
 
-      if (!product || product.inventoryCount < item.quantity) {
+      // Check if the product exists and if the available quantity is sufficient
+      if (!product || product.quantity < item.quantity) {
         return res
           .status(400)
-          .json({ error: `Insufficient inventory for ${product.name}` });
+          .json({ error: `Insufficient quantity for ${product.name}` });
       }
+      // Calculate the total amount
       totalAmount += product.new_price * item.quantity;
       console.log(`Actual Amount ${totalAmount}`);
     }
 
+    // Check if a promo code is applied and valid
     if (promoCode) {
       const validPromo = await PromoCode.findOne({
         code: promoCode,
@@ -376,6 +379,7 @@ app.post("/placeorder", fetchuser, async (req, res) => {
     }
     console.log("promo code amount " + totalAmount);
 
+    // Create a new order
     const order = new Order({
       userId: req.user.id,
       products,
@@ -388,12 +392,14 @@ app.post("/placeorder", fetchuser, async (req, res) => {
     await order.save();
     console.log("Order Placed", order);
 
+    // After placing the order, subtract the item quantity from the product quantity
     for (let item of products) {
       await Product.findByIdAndUpdate(item.productId, {
-        $inc: { inventoryCount: -item.quantity },
+        $inc: { quantity: -item.quantity },  // Subtract the ordered quantity
       });
     }
 
+    // Send email notification
     const mailOptions = {
       from: "your-email@gmail.com",
       to: "ahsank0811@gmail.com",
@@ -410,6 +416,7 @@ app.post("/placeorder", fetchuser, async (req, res) => {
 
     transporter.sendMail(mailOptions);
 
+    // Respond with the order details
     res.json({ success: true, order });
   } catch (error) {
     res.status(500).json({ error: error.message });
