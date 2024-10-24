@@ -3,6 +3,7 @@ import "./CSS/ShopCategory.css";
 import dropdown_icon from "../Components/Assets/dropdown_icon.png";
 import Item from "../Components/Item/Item";
 import { Link } from "react-router-dom";
+import { backend_url } from "../App";
 
 const ShopCategory = (props) => {
   const [allProducts, setAllProducts] = useState([]);
@@ -11,7 +12,7 @@ const ShopCategory = (props) => {
   const [error, setError] = useState(null); // To handle fetch errors
 
   const fetchInfo = () => {
-    fetch("http://localhost:4000/allproducts")
+    fetch(`${backend_url}/allproducts`)
       .then((res) => res.json())
       .then((data) => {
         setAllProducts(data);

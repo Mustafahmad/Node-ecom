@@ -9,7 +9,7 @@ const Navbar = () => {
     <div className="navbar">
       <img src={navlogo} className="nav-logo" alt="" />
       <p>KOOGLE ARDEN</p>
-      <img src={navprofileIcon} className="nav-profile" alt="" />
+      {/* <img src={navprofileIcon} className="nav-profile" alt="" /> */}
     </div>
   );
 };

@@ -5,8 +5,8 @@ import Navbar from "./Components/Navbar/Navbar";
 import Admin from "./Pages/Admin";
 import AdminLogin from "./Components/Auth/AdminLogin";
 
-export const backend_url = "http://localhost:4000";
-export const currency = "$";
+export const backend_url = "http://145.223.118.241:4000";
+export const currency = "RS";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);

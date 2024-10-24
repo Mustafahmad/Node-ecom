@@ -1,11 +1,12 @@
 .navbar {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   padding: 15px 60px;
   box-shadow: 0 1px 3px -2px black;
   margin-bottom: 1px;
   background-color: #d2b48c;
+  gap: 20px;
 }
 .nav-logo {
   width: 60px;
@@ -18,7 +19,7 @@
   text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
 }
 .nav-profile {
-  width: 75px;
+  display: none;
 }
 .main-logo {
   width: 20px;

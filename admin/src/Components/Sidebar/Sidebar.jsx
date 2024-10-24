@@ -22,12 +22,12 @@ const Sidebar = () => {
         </div>
       </Link>
 
-      <Link to="/admin/addcategory" style={{ textDecoration: "none" }}>
+      {/* <Link to="/admin/addcategory" style={{ textDecoration: "none" }}>
         <div className="sidebar-item">
           <img src={plus} alt="" style={{ height: "30px", width: "30px" }} />
           <p>New category</p>
         </div>
-      </Link>
+      </Link> */}
 
       <Link to="/admin/promocode" style={{ textDecoration: "none" }}>
         <div className="sidebar-item">
