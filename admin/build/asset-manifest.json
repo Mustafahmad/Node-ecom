@@ -1,0 +1,21 @@
+{
+  "files": {
+    "main.css": "/static/css/main.21266b04.css",
+    "main.js": "/static/js/main.a9ce672d.js",
+    "static/media/nav-profile.svg": "/static/media/nav-profile.273519004d5077e722f5c762f1881217.svg",
+    "static/media/logo.jpeg": "/static/media/logo.5bf3435f3e940a471088.jpeg",
+    "static/media/main-logo.png": "/static/media/main-logo.ea05d0029420ca27df2b.png",
+    "static/media/upload_area.svg": "/static/media/upload_area.72a08e8171a5082ba0e908a6f65bab93.svg",
+    "static/media/promocode.svg": "/static/media/promocode.849b8c493134d3f400cd7b22295bb2c2.svg",
+    "static/media/plus.svg": "/static/media/plus.3fa18fa22610970978723708fd55a43d.svg",
+    "static/media/Product_Cart.svg": "/static/media/Product_Cart.11a11e6ce241451b596c239a6f9164d7.svg",
+    "index.html": "/index.html",
+    "static/media/Product_list_icon.svg": "/static/media/Product_list_icon.62bf22cc467a30071cec5aae19f1b425.svg",
+    "main.21266b04.css.map": "/static/css/main.21266b04.css.map",
+    "main.a9ce672d.js.map": "/static/js/main.a9ce672d.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.21266b04.css",
+    "static/js/main.a9ce672d.js"
+  ]
+}
