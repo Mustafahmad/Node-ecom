@@ -12,7 +12,7 @@ import LoginSignup from "./Pages/LoginSignup";
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-export const backend_url = "https://api.kooglearden.com/";
+export const backend_url = "https://api.kooglearden.com";
 export const currency = "RS";
 
 function App() {

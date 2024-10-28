@@ -5,7 +5,7 @@ import Navbar from "./Components/Navbar/Navbar";
 import Admin from "./Pages/Admin";
 import AdminLogin from "./Components/Auth/AdminLogin";
 
-export const backend_url = "https://api.kooglearden.com/";
+export const backend_url = "https://api.kooglearden.com";
 export const currency = "RS";
 
 function App() {
