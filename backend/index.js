@@ -300,6 +300,7 @@ const Product = mongoose.model("Product", {
   inventoryCount: { type: Number, default: 0 },
   quantity: { type: Number, default: 0 },
   productSize: [{ type: String }],
+  color: [{ type: String }], // Added color array for multiple color names
   date: { type: Date, default: Date.now },
   available: { type: Boolean, default: true },
 });
@@ -504,6 +505,7 @@ app.post("/addproduct", async (req, res) => {
       inventoryCount: req.body.inventoryCount || 0,
       quantity: req.body.quantity || 0,
       productSize: req.body.productSize || [],
+      color: req.body.color || [], // Include color array here
     });
 
     await product.save();
