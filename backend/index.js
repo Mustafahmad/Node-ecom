@@ -514,6 +514,36 @@ app.post("/addproduct", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+app.put("/editproduct/:id", async (req, res) => {
+  try {
+    const updatedProduct = await Product.findByIdAndUpdate(
+      req.params.id,
+      {
+        name: req.body.name,
+        description: req.body.description,
+        image: req.body.image,
+        category: req.body.category,
+        subcategory: req.body.subcategory,
+        type: req.body.type,
+        new_price: req.body.new_price,
+        old_price: req.body.old_price,
+        inventoryCount: req.body.inventoryCount || 0,
+        quantity: req.body.quantity || 0,
+        productSize: req.body.productSize || [],
+        color: req.body.color || [], // Update color array here
+      },
+      { new: true } // Return the updated document
+    );
+
+    if (!updatedProduct) {
+      return res.status(404).json({ error: "Product not found" });
+    }
+
+    res.json({ success: true, product: updatedProduct });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 
 const BannerSchema = new mongoose.Schema({
   name: {
