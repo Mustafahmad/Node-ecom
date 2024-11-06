@@ -30,6 +30,10 @@
         align-self: center;
         border-radius: 5px;
       }
+      > .sizeChart {
+        max-height: 20rem;
+        object-fit: contain;
+      }
       .otherImagesSection {
         width: 100%;
         > .otherImages {
@@ -114,14 +118,16 @@
       padding: 8px;
       border-radius: 5px;
       border: 1px solid #cfd8dc;
+      color: black;
+      background-color: white;
       transition: border-color 0.2s;
       font-size: 0.85em;
     }
 
-    .singleProductDetailsInputDiv select:hover,
-    .singleProductDetailsInputDiv input:hover {
-      border-color: #90caf9;
-    }
+    // .singleProductDetailsInputDiv select:hover,
+    // .singleProductDetailsInputDiv input:hover {
+    //   border-color: #90caf9;
+    // }
 
     /* Button styles */
     button {
@@ -283,7 +289,7 @@
     border: 1px solid #ddd;
     border-radius: 5px;
     font-size: 1rem;
-    color: #333;
+    color: black;
     background-color: transparent;
 
     &:focus {
@@ -316,6 +322,9 @@
 // media queries
 // ----------------
 @media screen and (width < 700px) {
+  .sizeChart {
+    max-height: 15rem !important;
+  }
   .singleProduct {
     padding: 1rem;
   }
@@ -355,6 +364,9 @@
 }
 
 @media screen and (width < 350px) {
+  .sizeChart {
+    max-height: 10rem !important;
+  }
   .singleProductContainer {
     margin: 0 !important;
     > .showDetailsSection {

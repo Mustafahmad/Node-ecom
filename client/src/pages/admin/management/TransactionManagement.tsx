@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import AdminAside from "../../../components/admin/AdminAside";
@@ -8,7 +8,6 @@ import {
   useProcessOrderMutation,
   useSingleOrderQuery,
 } from "../../../redux/api/orderApi";
-// import { OrderItemType, OrderType } from "../../../types";
 import Loader from "../../../components/Loader";
 import { StoreRootState } from "../../../redux/store/store";
 import { CustomErrorType } from "../../../types/api-types";
@@ -32,7 +31,6 @@ export type OrderType = {
   city: string;
   country: string;
   state: string;
-  pinCode: number;
   status: string;
   subtotal: number;
   discount: number;
@@ -54,20 +52,13 @@ const TransactionManagement = () => {
   const [processBtnLoading, setProcessBtnLoading] = useState<boolean>(false);
   const [deleteBtnLoading, setDeleteBtnLoading] = useState<boolean>(false);
 
-  // error handling
-  if (isError) {
-    const err = error as CustomErrorType;
-    toast.error(err.data.message);
-    navigate("/404");
-    return;
-  }
   // update order processing to shipped and shipped to delivered
   const orderUpdateHandler = async () => {
     try {
       setProcessBtnLoading(true);
       const res = await processOrder({
-        orderId: order?._id!,
-        userId: user?._id!,
+        orderId: order?._id as string,
+        userId: user?._id as string,
       });
       if ("data" in res) {
         toast.success(res.data.message);
@@ -87,8 +78,8 @@ const TransactionManagement = () => {
     try {
       setDeleteBtnLoading(true);
       const res = await deleteOrder({
-        orderId: order?._id!,
-        userId: user?._id!,
+        orderId: order?._id as string,
+        userId: user?._id as string,
       });
       responseToast(res, navigate, "/admin/transactions");
       setDeleteBtnLoading(false);
@@ -101,7 +92,7 @@ const TransactionManagement = () => {
   // setting data in useEffect
   useEffect(() => {
     if (data) {
-      let receivedData = data.data;
+      const receivedData = data.data;
       if (data)
         setOrder({
           name: receivedData.userId?.name || "Deleted User",
@@ -109,7 +100,6 @@ const TransactionManagement = () => {
           city: receivedData.shippingInfo.city,
           country: receivedData.shippingInfo.country,
           state: receivedData.shippingInfo.state,
-          pinCode: Number(receivedData.shippingInfo.pinCode),
           status: receivedData.status,
           subtotal: receivedData.subtotal,
           discount: receivedData.discount,
@@ -120,6 +110,14 @@ const TransactionManagement = () => {
         });
     }
   }, [data]);
+
+  // error handling
+  if (isError) {
+    const err = error as CustomErrorType;
+    toast.error(err.data.message);
+    navigate("/404");
+    return;
+  }
 
   return (
     <div className="adminContainer">
@@ -152,7 +150,6 @@ const TransactionManagement = () => {
             <h5>User info</h5>
             <p>Name - {order.name}</p>
             <p>Country - {order.country}</p>
-            <p>Pin Code - {order.pinCode}</p>
             <p>Address - {`${order.address}, ${order.city}, ${order.state}`}</p>
             <h5>Amount Info</h5>
             <p>Subtotal - {order.subtotal}</p>
@@ -164,11 +161,7 @@ const TransactionManagement = () => {
               Status -{" "}
               <span
                 className={
-                  order.status === "delivered"
-                    ? "purple"
-                    : order.status === "shipped"
-                    ? "green"
-                    : "red"
+                  order.status === "delivered" ? "purple" : order.status === "shipped" ? "green" : "red"
                 }
               >
                 {order?.status.toUpperCase()}

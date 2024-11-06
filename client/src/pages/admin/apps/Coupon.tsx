@@ -1,9 +1,9 @@
 import { FormEvent, useState } from "react";
-import AdminAside from "../../../components/admin/AdminAside";
 import { FaPlus } from "react-icons/fa";
-import { backendServerUrl, StoreRootState } from "../../../redux/store/store";
 import { useSelector } from "react-redux";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
+import AdminAside from "../../../components/admin/AdminAside";
+import { backendServerUrl, StoreRootState } from "../../../redux/store/store";
 
 const allNumbers = "1234567890";
 const allSymbols = "*&^%$#@!-+=?/><|";
@@ -33,9 +33,7 @@ const Coupon = () => {
     setCoupon("");
     // Checking the selected fields
     if (!includeCharacters && !includeNumbers && !includeSymbols) {
-      return alert(
-        "Please select at least one from Characters, Numbers and Symbols"
-      );
+      return alert("Please select at least one from Characters, Numbers and Symbols");
     }
     // making a string which is used for generating coupon
     let entireCharsForCoupon: string = "";
@@ -47,9 +45,7 @@ const Coupon = () => {
     let generatedCoupon: string = prefix || "";
     const loopLength: number = size - generatedCoupon.length;
     for (let i = 0; i < loopLength; i++) {
-      const randomNumber: number = Math.floor(
-        Math.random() * entireCharsForCoupon.length
-      );
+      const randomNumber: number = Math.floor(Math.random() * entireCharsForCoupon.length);
       generatedCoupon += entireCharsForCoupon[randomNumber];
     }
     // Set coupon value and making is copied false
@@ -125,42 +121,37 @@ const Coupon = () => {
 
 export default Coupon;
 
-const ModalComponent = ({
-  isOpen,
-  onClose,
-}: {
-  isOpen: boolean;
-  onClose: () => void;
-}) => {
+const ModalComponent = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
   const { user } = useSelector((state: StoreRootState) => state.userReducer);
   const [couponCode, setCouponCode] = useState<string>("");
   const [price, setPrice] = useState<string>("");
+  const [expireAt, setExpireAt] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleSubmit = async (e: any) => {
-    if (!couponCode || !price)
-      return toast.error("Please enter coupon code and price");
-    if (couponCode.length < 8)
-      return toast.error("Coupon code must be atleast 8 characters long");
+    if (!couponCode || !price || !expireAt) return toast.error("Please enter coupon code and price");
+    if (couponCode.length < 8) return toast.error("Coupon code must be atleast 8 characters long");
     e.preventDefault();
     try {
-      const res = await fetch(
-        `${backendServerUrl}/api/v1/payments/coupon/new?id=${user?._id}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            couponCode,
-            amount: price,
-          }),
-        }
-      );
+      setIsLoading(true);
+      const res = await fetch(`${backendServerUrl}/api/v1/payments/coupon/new?id=${user?._id}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          couponCode,
+          amount: price,
+          expireAt,
+        }),
+      });
       const response = await res.json();
       if (response?.success) toast.success(response?.message);
-    } catch (error) {
+    } catch (error: any) {
+      toast.error(error?.response?.data?.message || "Error While Creating New Coupon");
       console.log("error while creating new coupon", error);
     } finally {
+      setIsLoading(false);
       onClose();
     }
   };
@@ -172,7 +163,7 @@ const ModalComponent = ({
         <button className="close-button" onClick={onClose}>
           &times;
         </button>
-        <h2 className="modal-title">Leave a Review</h2>
+        <h2 className="modal-title">Create New Coupon</h2>
         <form onSubmit={handleSubmit} className="modal-form">
           <div className="form-group">
             <label htmlFor="couponCode">Coupon Code</label>
@@ -197,7 +188,18 @@ const ModalComponent = ({
               required
             />
           </div>
-          <button type="submit" className="submit-button">
+          <div className="form-group">
+            <label htmlFor="expireAt">Expire At</label>
+            <input
+              type="date"
+              id="expireAt"
+              name="expireAt"
+              value={expireAt}
+              onChange={(e) => setExpireAt(e.target.value)}
+              required
+            />
+          </div>
+          <button disabled={isLoading} type="submit" className="submit-button">
             Submit
           </button>
         </form>

@@ -20,6 +20,8 @@ export type ProductTypes = {
   sizeChartPhoto: { publicId: string; url: string };
   createdAt: string;
   reviews: any[];
+  sizes: string[];
+  colors: string[];
   updatedAt: string;
 };
 
@@ -28,7 +30,6 @@ export type ShippingInfoTypes = {
   city: string;
   state: string;
   country: string;
-  pinCode: number;
 };
 
 export type CartItemType = {

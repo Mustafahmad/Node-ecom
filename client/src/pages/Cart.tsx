@@ -1,32 +1,30 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 import { VscError } from "react-icons/vsc";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import CartItemCard from "../components/CartItemCard";
 import { Skeleton } from "../components/Loader";
-import {
-  calculatePrise,
-  discountApplied,
-  removeFromCart,
-  updateCart,
-} from "../redux/reducers/cartReducer";
+import { calculatePrise, discountApplied, removeFromCart, updateCart } from "../redux/reducers/cartReducer";
 import { StoreRootState, backendServerUrl } from "../redux/store/store";
 import { CartItemType } from "../types/types";
 
 const Cart = () => {
   const dispatch = useDispatch();
-  const { discount, isLoading, cartItem, shippingCharges, subtotal, total } =
-    useSelector((state: StoreRootState) => state.cartReducer);
+  const { user } = useSelector((state: StoreRootState) => state.userReducer);
+  const { discount, isLoading, cartItem, shippingCharges, subtotal, total } = useSelector(
+    (state: StoreRootState) => state.cartReducer
+  );
 
   const [coupon, setCoupon] = useState<string>("");
   const [isValidCoupon, setIsValidCoupon] = useState<boolean>(false);
 
   // remove from cart handler function
-  const removeFromCartHandler = (productId: string) => {
+  const removeFromCartHandler = (productId: string, color: string, size: string) => {
+    console.log(cartItem, productId, color, size);
     try {
-      dispatch(removeFromCart(productId));
+      dispatch(removeFromCart({ productId, color, size }));
       toast.success("Product Removed From Cart");
       return;
     } catch (error) {
@@ -38,9 +36,7 @@ const Cart = () => {
   const IncrementHandler = (cartItem: CartItemType) => {
     try {
       if (cartItem.quantity >= cartItem.stock)
-        return toast.error(
-          `Only ${cartItem.stock} ${cartItem.name} left in stock`
-        );
+        return toast.error(`Only ${cartItem.stock} ${cartItem.name} left in stock`);
       dispatch(updateCart({ ...cartItem, quantity: cartItem.quantity + 1 }));
     } catch (error) {
       toast.error("Error While Increasing Quantity");
@@ -87,6 +83,7 @@ const Cart = () => {
       cancel("cancelled");
     };
   }, [coupon, dispatch, subtotal]);
+  if (!user?._id) return <Navigate to="/login" />;
 
   return (
     <div className="cartPage">
@@ -111,8 +108,7 @@ const Cart = () => {
         <p>Subtotal = Rs {subtotal} </p>
         <p>Shipping = Rs {shippingCharges} </p>
         <p>
-          Discount ={" "}
-          <em className={discount > 0 ? "green" : "red"}>{discount}% </em>
+          Discount = <em className={discount > 0 ? "green" : "red"}>{discount}% </em>
         </p>
         <p>
           <b>Total Amount = Rs {total} </b>
@@ -133,9 +129,7 @@ const Cart = () => {
             </span>
           )
         ) : undefined}
-        {cartItem.length > 0 ? (
-          <Link to={"/shipping"}>Checkout</Link>
-        ) : undefined}
+        {cartItem.length > 0 ? <Link to={"/shipping"}>Checkout</Link> : undefined}
       </aside>
     </div>
   );

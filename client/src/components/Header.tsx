@@ -1,25 +1,19 @@
 import { signOut } from "firebase/auth";
-import toast from "react-hot-toast";
 import { FaCartPlus } from "react-icons/fa";
-import { Link } from "react-router-dom";
-import logoimage from "../assets/web-images/logo.jpeg";
-import { auth } from "../firebase";
-import { User } from "../types/types";
-import {
-  RiLogoutBoxLine as Login,
-  RiLogoutBoxRLine as Logout,
-} from "react-icons/ri";
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+import logiImage from "../assets/web-images/logo.jpeg";
+import { auth } from "../firebase";
 import { StoreRootState } from "../redux/store/store";
+import { User } from "../types/types";
 
 interface HeaderPropTypes {
   user: User | null;
 }
 
 const Header = ({ user }: HeaderPropTypes) => {
-  const { cartItem } = useSelector(
-    (state: StoreRootState) => state.cartReducer
-  );
+  const { cartItem } = useSelector((state: StoreRootState) => state.cartReducer);
   const logOutHandler = async () => {
     try {
       await signOut(auth);
@@ -31,7 +25,7 @@ const Header = ({ user }: HeaderPropTypes) => {
   };
   return (
     <nav className="header">
-      <img height={100} src={logoimage} alt="logo image" />
+      <img height={100} src={logiImage} alt="logo image" />
       <div>
         <Link to={"/"} aria-label="home page">
           Home
@@ -60,8 +54,9 @@ const Header = ({ user }: HeaderPropTypes) => {
             </Link>
             {cartItem?.length > 0 && <span>{cartItem.length}</span>}
           </div>
-          <button title="Logout" onClick={logOutHandler}>
-            <Logout />
+          <button className="logout" title="Logout" onClick={logOutHandler}>
+            {/* <Logout /> */}
+            Logout
           </button>
         </div>
       ) : (
@@ -70,8 +65,9 @@ const Header = ({ user }: HeaderPropTypes) => {
           {/* ================= */}
 
           <div className="loginButton">
-            <Link to={"/login"} title="Login" aria-label="login page">
-              <Login />
+            <Link className="login" to={"/login"} title="Login" aria-label="login page">
+              {/* <Login /> */}
+              Login
             </Link>
           </div>
         </>

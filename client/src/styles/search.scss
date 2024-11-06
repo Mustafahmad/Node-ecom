@@ -83,6 +83,7 @@
       }
     }
   }
+
   .productCard {
     padding: 8px;
   }
@@ -134,5 +135,16 @@
   }
   .product-price {
     font-size: 0.85rem;
+  }
+}
+
+.productPriceWithOfferPrice {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  .product-offer-price {
+    font-size: 1rem;
+    font-weight: 800;
   }
 }

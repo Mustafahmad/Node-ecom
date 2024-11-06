@@ -210,6 +210,17 @@ a {
         padding: 0;
       }
     }
+    > a,
+    button {
+      @include button(100%, 0.5rem, 1rem);
+      font-size: 0.9rem;
+      color: white;
+    }
+    .login {
+      @include button(100%, 0.5rem, 1rem);
+      font-size: 0.9rem;
+      color: white;
+    }
   }
 }
 
@@ -232,13 +243,19 @@ a {
     }
   }
 }
-@media screen and (width < 350px) {
+@media screen and (width < 400px) {
   .header {
     > div {
       gap: 0.5rem;
       > a {
         font-size: 0.8rem;
       }
+    }
+  }
+  .logoutButton {
+    gap: 0.2rem !important;
+    .logout {
+      font-size: 10px !important;
     }
   }
 }

@@ -1,6 +1,6 @@
 import axios from "axios";
 import { ChangeEvent, useState } from "react";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 import { BiArrowBack } from "react-icons/bi";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
@@ -15,14 +15,12 @@ interface InitialState {
   state: string;
   city: string;
   country: string;
-  pinCode: number;
 }
 const initialState: InitialState = {
   address: "",
   state: "",
   city: "",
   country: "",
-  pinCode: 0,
 };
 
 const Shipping = () => {
@@ -41,9 +39,7 @@ const Shipping = () => {
     cartItem: cartItemSelected,
   } = useSelector((state: StoreRootState) => state.cartReducer);
 
-  const inputOnChangeHandler = (
-    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
+  const inputOnChangeHandler = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     e.preventDefault();
     setShippingInfo((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
@@ -52,18 +48,10 @@ const Shipping = () => {
     if (cartItemSelected?.length <= 0) return navigate("/cart");
     setIsLoading(true);
     e.preventDefault();
-    if (
-      !shippingInfo.address ||
-      !shippingInfo.city ||
-      !shippingInfo.country ||
-      !shippingInfo.pinCode ||
-      !shippingInfo.state
-    ) {
+    if (!shippingInfo.address || !shippingInfo.city || !shippingInfo.country || !shippingInfo.state) {
       return toast.error("Please Enter Full Shipping info");
     }
-    let subject = `One Order Placed By ${
-      user?.name
-    } and this user details are \n\n${JSON.stringify({
+    let subject = `One Order Placed By ${user?.name} and this user details are \n\n${JSON.stringify({
       name: user?.name,
       email: user?.email,
       gender: user?.gender,
@@ -72,9 +60,7 @@ const Shipping = () => {
       shippingCharges,
       discount,
       totalAmount,
-    })}\n\n and Shipping Info is \n\n${JSON.stringify(
-      shippingInfo
-    )}\n\nProducts He Selected are \n\n`;
+    })}\n\n and Shipping Info is \n\n${JSON.stringify(shippingInfo)}\n\nProducts He Selected are \n\n`;
     cartItemSelected.forEach((item, i) => {
       subject += `${i}== name-${item?.name} quantity-${item?.quantity} price-${item?.price} size-${item?.productSize} category-${item?.category} subCategory-${item?.subCategory} productId-${item?.productId} color-${item?.colorDescription}  \n\n`;
     });
@@ -94,11 +80,10 @@ const Shipping = () => {
     try {
       const { data } = await axios.post(
         `${backendServerUrl}/api/v1/payments/create`,
-        { email: import.meta.env.VITE_EMAIL, subject },
+        { adminEmail: import.meta.env.VITE_EMAIL, subject, clientEmail: user?.email },
         { headers: { "Content-Type": "application/json" } }
       );
-      if (!data)
-        return toast.error("Some Error Occurred. Please Try Again Later");
+      if (!data) return toast.error("Some Error Occurred. Please Try Again Later");
       //  add order after success
       const res = await createOrder(newOrderData);
       dispatch(resetCart());
@@ -162,16 +147,6 @@ const Shipping = () => {
           <option value="pakistan">Pakistan</option>
           <option value="india">India</option>
         </select>
-        <input
-          required
-          id="pinCode"
-          type="number"
-          name="pinCode"
-          autoComplete="postal-code"
-          value={shippingInfo.pinCode}
-          placeholder="Enter Your PinCode"
-          onChange={inputOnChangeHandler}
-        />
         <button disabled={loading} type="submit">
           Place Order
         </button>

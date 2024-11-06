@@ -54,10 +54,6 @@ const orderSchema = new Schema<OrderSchemaTypes>(
         type: String,
         required: true,
       },
-      pinCode: {
-        type: Number,
-        required: true,
-      },
     },
     cartItem: [singleCartItem],
     userId: {
