@@ -7,7 +7,10 @@ import { useCreateNewProductMutation } from "../../../redux/api/productApi";
 import { StoreRootState } from "../../../redux/store/store";
 import { responseToast } from "../../../utils/features";
 
-import { categoriesOptions, subCategoriesOptions } from "../../../sampleData/data";
+import {
+  categoriesOptions,
+  subCategoriesOptions,
+} from "../../../sampleData/data";
 
 const NewProduct = () => {
   const [name, setName] = useState<string>("");
@@ -77,7 +80,14 @@ const NewProduct = () => {
     setButtonLoading(true);
 
     // Ensure all required fields, including the Size Chart photo, are provided
-    if (!photos.length || !name || (stock && stock < 0) || !category || !price || !sizeChartPhoto) {
+    if (
+      !photos.length ||
+      !name ||
+      (stock && stock < 0) ||
+      !category ||
+      !price ||
+      !sizeChartPhoto
+    ) {
       toast.error("Please enter all fields including the Size Chart photo.");
       setButtonLoading(false);
       return;
@@ -141,7 +151,6 @@ const NewProduct = () => {
             <div>
               <label htmlFor="newProductOfferPrice">Offer Price:</label>
               <input
-                required
                 type="number"
                 value={offerPrice}
                 id="newProductOfferPrice"
@@ -151,7 +160,12 @@ const NewProduct = () => {
             </div>
             <div>
               <label htmlFor="newProductCategory">Category:</label>
-              <select required id="newProductCategory" value={category} onChange={handleCategoryChange}>
+              <select
+                required
+                id="newProductCategory"
+                value={category}
+                onChange={handleCategoryChange}
+              >
                 <option value="">Select Category</option>
                 {categoriesOptions.map((cat) => (
                   <option key={cat} value={cat}>
@@ -172,11 +186,13 @@ const NewProduct = () => {
                   onChange={(e) => setSubCategory(e.target.value)}
                 >
                   <option value="">Select Sub Category</option>
-                  {subCategoriesOptions[category]?.map((sub: string, index: number) => (
-                    <option key={index} value={sub}>
-                      {sub.toUpperCase()}
-                    </option>
-                  ))}
+                  {subCategoriesOptions[category]?.map(
+                    (sub: string, index: number) => (
+                      <option key={index} value={sub}>
+                        {sub.toUpperCase()}
+                      </option>
+                    )
+                  )}
                 </select>
               </div>
             )}
@@ -193,7 +209,12 @@ const NewProduct = () => {
             </div>
             <div>
               <label htmlFor="sizeChartPhoto">Size Chart Photo:</label>
-              <input required type="file" id="sizeChartPhoto" onChange={changeSizeChartHandler} />
+              <input
+                required
+                type="file"
+                id="sizeChartPhoto"
+                onChange={changeSizeChartHandler}
+              />
               {sizeChartPreview && (
                 <div className="sizeChartPreview">
                   <img src={sizeChartPreview} alt="Size Chart Preview" />
@@ -202,13 +223,23 @@ const NewProduct = () => {
             </div>
             <div>
               <label htmlFor="newProductPhotos">Product Photos:</label>
-              <input required type="file" id="newProductPhotos" multiple onChange={changePhotoHandler} />
+              <input
+                required
+                type="file"
+                id="newProductPhotos"
+                multiple
+                onChange={changePhotoHandler}
+              />
             </div>
             <div className="photoPreviews">
               {previewPhotos.map((photo, index) => (
                 <div key={index} className="photoContainer">
                   <img src={photo} alt={`product preview ${index}`} />
-                  <button type="button" onClick={() => removePhoto(index)} className="removePhoto">
+                  <button
+                    type="button"
+                    onClick={() => removePhoto(index)}
+                    className="removePhoto"
+                  >
                     &times;
                   </button>
                 </div>

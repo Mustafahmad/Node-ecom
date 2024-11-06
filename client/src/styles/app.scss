@@ -386,7 +386,6 @@ a {
 // =========================
 .adminContainer {
   @include grid(1fr 4fr, 2rem);
-  height: 100vh;
   > aside {
     @include customScrollbar(none);
     position: relative;
