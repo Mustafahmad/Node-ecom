@@ -12,15 +12,24 @@ import { sendMail } from "../utils/sendMail.js";
 // ================================================
 // GET SINGLE PRODUCT
 
-export const createNewCoupon = TryCatch(async (req: Request<{}, {}, CouponCodeTypes>, res, next) => {
-  const { couponCode, amount } = req.body;
-  if (!couponCode || !amount) {
-    return next(new CustomError("Please Enter Coupon Code And Amount First", 400));
+export const createNewCoupon = TryCatch(
+  async (req: Request<{}, {}, CouponCodeTypes>, res, next) => {
+    const { couponCode, amount } = req.body;
+    if (!couponCode || !amount) {
+      return next(
+        new CustomError("Please Enter Coupon Code And Amount First", 400)
+      );
+    }
+    const newCoupon = await Coupon.create({ couponCode, amount });
+    if (!newCoupon)
+      return next(new CustomError("Error While Creating Coupon Code", 500));
+    responseFunc(
+      res,
+      `Coupon ${newCoupon.couponCode} Generated for ${newCoupon.amount} Percent`,
+      201
+    );
   }
-  const newCoupon = await Coupon.create({ couponCode, amount });
-  if (!newCoupon) return next(new CustomError("Error While Creating Coupon Code", 500));
-  responseFunc(res, `Coupon ${newCoupon.couponCode} Generated for ${newCoupon.amount}-Rs`, 201);
-});
+);
 // ================================================
 // http://localhost:8000/api/v1/payments/coupon/all
 // ================================================
@@ -52,10 +61,12 @@ export const deleteSingleCoupon = TryCatch(async (req, res, next) => {
   if (!couponCode) return next(new CustomError("Invalid Coupon Code", 400));
   if (isValidObjectId(couponCode)) {
     deletedCoupon = await Coupon.findByIdAndDelete(couponCode);
-    if (!deletedCoupon) return next(new CustomError("Invalid Coupon Code or Id", 400));
+    if (!deletedCoupon)
+      return next(new CustomError("Invalid Coupon Code or Id", 400));
   } else {
     deletedCoupon = await Coupon.findOneAndDelete({ couponCode });
-    if (!deletedCoupon) return next(new CustomError("Invalid Coupon Code or Id", 400));
+    if (!deletedCoupon)
+      return next(new CustomError("Invalid Coupon Code or Id", 400));
   }
   responseFunc(res, `Coupon Deleted Successfully`, 201);
 });

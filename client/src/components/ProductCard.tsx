@@ -26,7 +26,7 @@ const ProductCard = ({ name, photo, price, productId }: ProductsProps) => {
       />
       <hr className="hr" />
       <p className="product-name">{name}</p>
-      <span className="product-price">RS{price} </span>
+      <span className="product-price">Rs {price} </span>
       <div
         onClick={() => navigate(`/product/${productId}`)}
         className="product-hover"

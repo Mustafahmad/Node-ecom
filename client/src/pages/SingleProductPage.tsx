@@ -166,7 +166,7 @@ const SingleProductPage = () => {
               <div>
                 <h4>Product Price</h4>
                 <p>
-                  <span className="secondSpan">RS {product?.offerPrice}</span>
+                  <span className="secondSpan">Rs {product?.offerPrice}</span>
                 </p>
                 <hr />
               </div>

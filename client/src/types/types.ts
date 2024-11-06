@@ -50,7 +50,6 @@ export type CartItemType = {
 export type NewOrderDateTypes = {
   userId: string;
   subtotal: number;
-  tax: number;
   shippingCharges: number;
   discount: number;
   total: number;
@@ -77,7 +76,6 @@ export type MyAllOrdersDataTypes = {
     name: string;
   };
   subtotal: number;
-  tax: number;
   discount: number;
   total: number;
   shippingCharges: number;
@@ -102,7 +100,10 @@ export type TransactionItem = {
 export type DashboardStats = {
   thisToLastMonthPercentage: CountInStats;
   totalCounts: CountInStats;
-  TransactionAndRevenueChartData: { transactionCountData: number[]; totalRevenueData: number[] };
+  TransactionAndRevenueChartData: {
+    transactionCountData: number[];
+    totalRevenueData: number[];
+  };
   inventoryProductsCategoryPercentage: Record<string, number>;
   userChartData: {
     female: number;

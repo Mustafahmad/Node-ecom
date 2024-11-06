@@ -35,14 +35,15 @@ const Shipping = () => {
 
   const {
     subtotal,
-    tax,
     shippingCharges,
     total: totalAmount,
     discount,
     cartItem: cartItemSelected,
   } = useSelector((state: StoreRootState) => state.cartReducer);
 
-  const inputOnChangeHandler = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const inputOnChangeHandler = (
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     e.preventDefault();
     setShippingInfo((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
@@ -60,17 +61,20 @@ const Shipping = () => {
     ) {
       return toast.error("Please Enter Full Shipping info");
     }
-    let subject = `One Order Placed By ${user?.name} and this user details are \n\n${JSON.stringify({
+    let subject = `One Order Placed By ${
+      user?.name
+    } and this user details are \n\n${JSON.stringify({
       name: user?.name,
       email: user?.email,
       gender: user?.gender,
     })}\n\n and Total Amount Details are \n\n${JSON.stringify({
       subtotal,
-      tax,
       shippingCharges,
       discount,
       totalAmount,
-    })}\n\n and Shipping Info is \n\n${JSON.stringify(shippingInfo)}\n\nProducts He Selected are \n\n`;
+    })}\n\n and Shipping Info is \n\n${JSON.stringify(
+      shippingInfo
+    )}\n\nProducts He Selected are \n\n`;
     cartItemSelected.forEach((item, i) => {
       subject += `${i}== name-${item?.name} quantity-${item?.quantity} price-${item?.price} size-${item?.productSize} category-${item?.category} subCategory-${item?.subCategory} productId-${item?.productId} color-${item?.colorDescription}  \n\n`;
     });
@@ -78,7 +82,6 @@ const Shipping = () => {
     const newOrderData: NewOrderDateTypes = {
       userId: user?._id as string,
       subtotal,
-      tax: tax,
       shippingCharges: shippingCharges,
       discount: discount,
       total: totalAmount,
@@ -94,7 +97,8 @@ const Shipping = () => {
         { email: import.meta.env.VITE_EMAIL, subject },
         { headers: { "Content-Type": "application/json" } }
       );
-      if (!data) return toast.error("Some Error Occurred. Please Try Again Later");
+      if (!data)
+        return toast.error("Some Error Occurred. Please Try Again Later");
       //  add order after success
       const res = await createOrder(newOrderData);
       dispatch(resetCart());

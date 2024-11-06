@@ -1,32 +1,30 @@
 import { signOut } from "firebase/auth";
-import { useState } from "react";
 import toast from "react-hot-toast";
-import { FaCartPlus, FaSearch, FaSignInAlt, FaUserTie } from "react-icons/fa";
-import { IoHome } from "react-icons/io5";
+import { FaCartPlus } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import logoimage from "../assets/web-images/logo.jpeg";
 import { auth } from "../firebase";
 import { User } from "../types/types";
-import logoimage from "../assets/web-images/logo.jpeg";
-import { FiLogOut } from "react-icons/fi";
-import { BiLogIn, BiLogOut } from "react-icons/bi";
+import {
+  RiLogoutBoxLine as Login,
+  RiLogoutBoxRLine as Logout,
+} from "react-icons/ri";
+import { useSelector } from "react-redux";
+import { StoreRootState } from "../redux/store/store";
 
 interface HeaderPropTypes {
   user: User | null;
 }
 
 const Header = ({ user }: HeaderPropTypes) => {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [isRegisterOpen, setIsRegisterOpen] = useState<boolean>(false);
-  const onClose = () => {
-    setIsOpen(false);
-  };
+  const { cartItem } = useSelector(
+    (state: StoreRootState) => state.cartReducer
+  );
   const logOutHandler = async () => {
     try {
       await signOut(auth);
-      onClose();
       toast.success("Logout Successfully");
     } catch (error) {
-      onClose();
       toast.error("Logout Failed Please Try Again Lated");
       throw error;
     }
@@ -35,10 +33,10 @@ const Header = ({ user }: HeaderPropTypes) => {
     <nav className="header">
       <img height={100} src={logoimage} alt="logo image" />
       <div>
-        <Link onClick={onClose} to={"/"} aria-label="home page">
+        <Link to={"/"} aria-label="home page">
           Home
         </Link>
-        <Link onClick={onClose} to={"/search"} aria-label="search page">
+        <Link to={"/search"} aria-label="search page">
           Products
         </Link>
 
@@ -47,7 +45,7 @@ const Header = ({ user }: HeaderPropTypes) => {
             Admin
           </Link>
         ) : (
-          <Link onClick={onClose} to={"/orders"} aria-label="admin page">
+          <Link to={"/orders"} aria-label="admin page">
             Orders
           </Link>
         )}
@@ -56,11 +54,14 @@ const Header = ({ user }: HeaderPropTypes) => {
       {/* ============= */}
       {user?._id ? (
         <div className="logoutButton">
-          <Link onClick={onClose} to={"/cart"} aria-label="cart page">
-            <FaCartPlus />
-          </Link>
+          <div className="cartDiv">
+            <Link to={"/cart"} aria-label="cart page">
+              <FaCartPlus />
+            </Link>
+            {cartItem?.length > 0 && <span>{cartItem.length}</span>}
+          </div>
           <button title="Logout" onClick={logOutHandler}>
-            <BiLogOut />
+            <Logout />
           </button>
         </div>
       ) : (
@@ -69,13 +70,8 @@ const Header = ({ user }: HeaderPropTypes) => {
           {/* ================= */}
 
           <div className="loginButton">
-            <Link
-              onClick={() => setIsRegisterOpen(false)}
-              to={"/login"}
-              title="Login"
-              aria-label="login page"
-            >
-              <BiLogIn />
+            <Link to={"/login"} title="Login" aria-label="login page">
+              <Login />
             </Link>
           </div>
         </>

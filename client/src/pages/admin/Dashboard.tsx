@@ -6,7 +6,10 @@ import { HiTrendingDown, HiTrendingUp } from "react-icons/hi";
 import { useSelector } from "react-redux";
 import Loader from "../../components/Loader";
 import AdminAside from "../../components/admin/AdminAside";
-import { BarChartComponent, DoughnutChartComponent } from "../../components/admin/Charts";
+import {
+  BarChartComponent,
+  DoughnutChartComponent,
+} from "../../components/admin/Charts";
 import DashboardTable from "../../components/admin/DashboardTable";
 import { useDashboardStatsQuery } from "../../redux/api/adminApi";
 import { StoreRootState } from "../../redux/store/store";
@@ -17,7 +20,9 @@ import { getColor } from "../../utils/getColorsForPercentage";
 const Dashboard = () => {
   const { user } = useSelector((state: StoreRootState) => state.userReducer);
 
-  const { data, isLoading, isError, error } = useDashboardStatsQuery(user?._id as string);
+  const { data, isLoading, isError, error } = useDashboardStatsQuery(
+    user?._id as string
+  );
   // error handling for dashboard
   if (isError) {
     const err = error as CustomErrorType;
@@ -35,7 +40,12 @@ const Dashboard = () => {
           {/* ========================== */}
           <article className="searchContainer">
             <BsSearch />
-            <input type="text" id="adminSearch" name="adminSearch" placeholder="Search users and docs" />
+            <input
+              type="text"
+              id="adminSearch"
+              name="adminSearch"
+              placeholder="Search users and docs"
+            />
             <FaRegBell />
             <img src={user?.photo} alt="user dp" />
           </article>
@@ -77,7 +87,9 @@ const Dashboard = () => {
                 title_1="Revenue"
                 title_2="Transactions"
                 data_1={stats?.TransactionAndRevenueChartData?.totalRevenueData}
-                data_2={stats?.TransactionAndRevenueChartData?.transactionCountData}
+                data_2={
+                  stats?.TransactionAndRevenueChartData?.transactionCountData
+                }
                 bgColor_1="rgb(0,115,255)"
                 bgColor_2="rgba(52,162,253,0.7)"
                 barThickness={0.5}
@@ -86,11 +98,18 @@ const Dashboard = () => {
             </section>
             <section className="inventoryDetails">
               <h2>InventOry</h2>
-              {Object.entries(stats.inventoryProductsCategoryPercentage).map(([category, percentage]) => {
-                return (
-                  <InventoryItem key={category} heading={category} value={percentage} getColor={getColor} />
-                );
-              })}
+              {Object.entries(stats.inventoryProductsCategoryPercentage).map(
+                ([category, percentage]) => {
+                  return (
+                    <InventoryItem
+                      key={category}
+                      heading={category}
+                      value={percentage}
+                      getColor={getColor}
+                    />
+                  );
+                }
+              )}
             </section>
           </article>
           {/* TRANSACTION & GENDER ARTICLE */}
@@ -129,14 +148,20 @@ interface WidgetItemProps {
   getColor: (percent: number) => string;
   amount?: boolean;
 }
-const WidgetItem = ({ heading, value, percent, getColor, amount = false }: WidgetItemProps) => {
+const WidgetItem = ({
+  heading,
+  value,
+  percent,
+  getColor,
+  amount = false,
+}: WidgetItemProps) => {
   const color = getColor(percent);
 
   return (
     <section className="widgetItem">
       <section className="widgetInfo">
         <p>{heading}</p>
-        <h4>{amount ? `$${value}` : value}</h4>
+        <h4>{amount ? `Rs${value}` : value}</h4>
         {percent > 0 ? (
           <span style={{ color: color }}>
             <HiTrendingUp /> +{percent}%
@@ -150,7 +175,9 @@ const WidgetItem = ({ heading, value, percent, getColor, amount = false }: Widge
       <section
         className="widgetCircleBar"
         style={{
-          background: `conic-gradient(${color} ${(Math.abs(percent) / 100) * 360}deg,rgba(255,255,255) 0)`,
+          background: `conic-gradient(${color} ${
+            (Math.abs(percent) / 100) * 360
+          }deg,rgba(255,255,255) 0)`,
         }}
       >
         <span style={{ color: color }}>{Math.abs(Math.round(percent))}%</span>

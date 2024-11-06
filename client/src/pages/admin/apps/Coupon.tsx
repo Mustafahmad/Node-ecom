@@ -33,7 +33,9 @@ const Coupon = () => {
     setCoupon("");
     // Checking the selected fields
     if (!includeCharacters && !includeNumbers && !includeSymbols) {
-      return alert("Please select at least one from Characters, Numbers and Symbols");
+      return alert(
+        "Please select at least one from Characters, Numbers and Symbols"
+      );
     }
     // making a string which is used for generating coupon
     let entireCharsForCoupon: string = "";
@@ -45,7 +47,9 @@ const Coupon = () => {
     let generatedCoupon: string = prefix || "";
     const loopLength: number = size - generatedCoupon.length;
     for (let i = 0; i < loopLength; i++) {
-      const randomNumber: number = Math.floor(Math.random() * entireCharsForCoupon.length);
+      const randomNumber: number = Math.floor(
+        Math.random() * entireCharsForCoupon.length
+      );
       generatedCoupon += entireCharsForCoupon[randomNumber];
     }
     // Set coupon value and making is copied false
@@ -121,26 +125,37 @@ const Coupon = () => {
 
 export default Coupon;
 
-const ModalComponent = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
+const ModalComponent = ({
+  isOpen,
+  onClose,
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+}) => {
   const { user } = useSelector((state: StoreRootState) => state.userReducer);
   const [couponCode, setCouponCode] = useState<string>("");
   const [price, setPrice] = useState<string>("");
 
   const handleSubmit = async (e: any) => {
-    if (!couponCode || !price) return toast.error("Please enter coupon code and price");
-    if (couponCode.length < 8) return toast.error("Coupon code must be atleast 8 characters long");
+    if (!couponCode || !price)
+      return toast.error("Please enter coupon code and price");
+    if (couponCode.length < 8)
+      return toast.error("Coupon code must be atleast 8 characters long");
     e.preventDefault();
     try {
-      const res = await fetch(`${backendServerUrl}/api/v1/payments/coupon/new?id=${user?._id}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          couponCode,
-          amount: price,
-        }),
-      });
+      const res = await fetch(
+        `${backendServerUrl}/api/v1/payments/coupon/new?id=${user?._id}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            couponCode,
+            amount: price,
+          }),
+        }
+      );
       const response = await res.json();
       if (response?.success) toast.success(response?.message);
     } catch (error) {
@@ -172,7 +187,7 @@ const ModalComponent = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => v
           </div>
 
           <div className="form-group">
-            <label htmlFor="amount">Amount</label>
+            <label htmlFor="amount">Percentage</label>
             <input
               type="text"
               id="amount"
