@@ -4,7 +4,10 @@ import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import StarIcon from "../assets/StarIcon";
-import { useAddReviewMutation, useSingleProductQuery } from "../redux/api/productApi";
+import {
+  useAddReviewMutation,
+  useSingleProductQuery,
+} from "../redux/api/productApi";
 import { addToCart } from "../redux/reducers/cartReducer";
 import { StoreRootState } from "../redux/store/store";
 import { CartItemType } from "../types/types";
@@ -35,10 +38,15 @@ const SingleProductPage = () => {
     updatedAt: "",
   });
   const { id: productId } = useParams();
-  const { data, isLoading, isSuccess, refetch } = useSingleProductQuery(productId!);
+  const { data, isLoading, isSuccess, refetch } = useSingleProductQuery(
+    productId!
+  );
   // console.log(data);
 
-  const addToCartHandler = (e: React.MouseEvent<HTMLButtonElement>, cartItem: CartItemType) => {
+  const addToCartHandler = (
+    e: React.MouseEvent<HTMLButtonElement>,
+    cartItem: CartItemType
+  ) => {
     try {
       if (!cartItem.colorDescription || !cartItem.productSize) {
         return toast.error("Please Select size and color");
@@ -58,7 +66,8 @@ const SingleProductPage = () => {
         return toast.error("Please Select All Fields");
       }
       e.stopPropagation();
-      if (cartItem.stock < 1) return toast.error(`${cartItem.name} is out of stock`);
+      if (cartItem.stock < 1)
+        return toast.error(`${cartItem.name} is out of stock`);
       dispatch(addToCart(cartItem));
       toast.success("Product Added To Cart");
       return;
@@ -86,7 +95,15 @@ const SingleProductPage = () => {
     userId: string;
   }) => {
     try {
-      if (!username || !rating || !message || !email || !gender || !productId || !userId)
+      if (
+        !username ||
+        !rating ||
+        !message ||
+        !email ||
+        !gender ||
+        !productId ||
+        !userId
+      )
         return toast.error("All fields are required");
       const response = await addReviewForProduct({
         username,
@@ -111,7 +128,9 @@ const SingleProductPage = () => {
         createdAt: data?.data?.createdAt?.split("T")[0],
         updatedAt: data?.data?.updatedAt?.split("T")[0],
         banner: data?.data?.photos?.[0],
-        otherImages: data?.data?.photos?.slice(1).concat(data?.data?.sizeChartPhoto),
+        otherImages: data?.data?.photos
+          ?.slice(1)
+          .concat(data?.data?.sizeChartPhoto),
         reviews: data?.data?.reviews?.slice(0, 5),
       };
       setProduct(productData);
@@ -138,44 +157,44 @@ const SingleProductPage = () => {
         <section className="showImagesSection">
           <div className="details">
             <div>
-              <p>Product Name</p>
-              <h4>{product?.name}</h4>
+              <h4>Product Name</h4>
+              <p>{product?.name}</p>
               <hr />
             </div>
 
             {product?.offerPrice > 0 ? (
               <div>
-                <p>Product Price</p>
-                <h4>
-                  <span className="firstSpan">{product?.price}Rs</span>
-                  <span className="secondSpan">{product?.offerPrice}Rs</span>
-                </h4>
+                <h4>Product Price</h4>
+                <p>
+                  <span className="secondSpan">RS {product?.offerPrice}</span>
+                </p>
                 <hr />
               </div>
             ) : (
               <div>
-                <p>Product Price</p>
-                <h4>{product?.price}</h4>
+                <h4>Product Price</h4>
+                <p>{product?.price}</p>
                 <hr />
               </div>
             )}
             <div>
-              <p>Product Stock</p>
-              <h4>{product?.stock}</h4>
+              <h4>Product Category</h4>
+              <p>{product?.category}</p>
               <hr />
             </div>
             <div>
-              <p>Product Category</p>
-              <h4>{product?.category}</h4>
+              <h4>Product Sub Category</h4>
+              <p>{product?.subCategory}</p>
               <hr />
-            </div>
-            <div>
-              <p>Product Sub Category</p>
-              <h4>{product?.subCategory}</h4>
             </div>
             <div className="singleProductDetailsInputDiv">
               <label htmlFor="size">Size</label>
-              <select name="size" id="size" value={size} onChange={(e) => setSize(e.target.value)}>
+              <select
+                name="size"
+                id="size"
+                value={size}
+                onChange={(e) => setSize(e.target.value)}
+              >
                 <option value="">Select Size</option>
                 <option value="XS">XS</option>
                 <option value="S">S</option>
@@ -213,7 +232,9 @@ const SingleProductPage = () => {
             >
               Add to cart
             </button>
-            {user && user?._id && <button onClick={() => setIsModalOpen(true)}>Add Reviews</button>}
+            {user && user?._id && (
+              <button onClick={() => setIsModalOpen(true)}>Add Reviews</button>
+            )}
           </div>
         </section>
       </article>
@@ -258,7 +279,12 @@ const Reviews = ({ rating }: { rating: number }) => {
       {[1, 2, 3, 4, 5].map((item) => {
         if (item <= rating) {
           return (
-            <button key={item} className={`star-button ${item <= rating ? "selected" : "unselected"}`}>
+            <button
+              key={item}
+              className={`star-button ${
+                item <= rating ? "selected" : "unselected"
+              }`}
+            >
               <StarIcon />
             </button>
           );
@@ -296,7 +322,13 @@ const ModalComponent = ({
   };
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    if (!formData.username || !formData.rating || !formData.message || !user || !user._id) {
+    if (
+      !formData.username ||
+      !formData.rating ||
+      !formData.message ||
+      !user ||
+      !user._id
+    ) {
       return toast.error("Please fill all the fields");
     }
 
@@ -340,7 +372,13 @@ const ModalComponent = ({
           </div>
           <div className="form-group">
             <label htmlFor="rating">Rating</label>
-            <select required name="rating" id="rating" value={formData.rating} onChange={handleInputChange}>
+            <select
+              required
+              name="rating"
+              id="rating"
+              value={formData.rating}
+              onChange={handleInputChange}
+            >
               <option value="">Select Rating 1 to 5</option>
               {[1, 2, 3, 4, 5].map((item) => (
                 <option key={item} value={item}>

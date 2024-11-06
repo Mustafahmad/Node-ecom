@@ -4,6 +4,7 @@ import { Toaster } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Header from "./components/Header";
+import Footer from "./components/Footer";
 import Loader from "./components/Loader";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { auth } from "./firebase";
@@ -41,8 +42,12 @@ const Coupon = lazy(() => import("./pages/admin/apps/Coupon"));
 const Stopwatch = lazy(() => import("./pages/admin/apps/Stopwatch"));
 // MANAGEMENT
 const NewProduct = lazy(() => import("./pages/admin/management/NewProduct"));
-const ProductsManagement = lazy(() => import("./pages/admin/management/ProductsManagement"));
-const TransactionManagement = lazy(() => import("./pages/admin/management/TransactionManagement"));
+const ProductsManagement = lazy(
+  () => import("./pages/admin/management/ProductsManagement")
+);
+const TransactionManagement = lazy(
+  () => import("./pages/admin/management/TransactionManagement")
+);
 
 const App = () => {
   const dispatch = useDispatch();
@@ -86,7 +91,9 @@ const App = () => {
             }
           />
           {/* AUTHENTIC USER ONLY */}
-          <Route element={<ProtectedRoute isAuthenticated={user ? true : false} />}>
+          <Route
+            element={<ProtectedRoute isAuthenticated={user ? true : false} />}
+          >
             <Route path="/shipping" element={<Shipping />} />
             <Route path="/orders" element={<Orders />} />
           </Route>
@@ -116,13 +123,20 @@ const App = () => {
             <Route path="/admin/app/stopwatch" element={<Stopwatch />} />
             {/* MANAGEMENT  */}
             <Route path="/admin/product/new" element={<NewProduct />} />
-            <Route path="/admin/products/single/:id" element={<ProductsManagement />} />
-            <Route path="/admin/transaction/:id" element={<TransactionManagement />} />
+            <Route
+              path="/admin/products/single/:id"
+              element={<ProductsManagement />}
+            />
+            <Route
+              path="/admin/transaction/:id"
+              element={<TransactionManagement />}
+            />
           </Route>
           {/* page not found route will be here */}
           <Route path="*" element={<PageNotFound />} />
         </Routes>
       </Suspense>
+      <Footer />
       <Toaster position="top-right" />
     </BrowserRouter>
   );
